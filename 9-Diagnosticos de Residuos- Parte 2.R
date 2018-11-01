@@ -1,6 +1,6 @@
 
 
-#Aula 9 - Diagnósticos de Resíduos 2
+#Aula 9 - DiagnÃ³sticos de ResÃ­duos 2
 install.packages("lmtest")
 install.packages("aTSA")
 library(lmtest)
@@ -13,17 +13,17 @@ library(readxl)
 
 data(jocci)                                                       #Department of commerce commodity price index - USA
 View(jocci)
-JOCCI <- as.data.frame(jocci)                                     #Y é o Index Jocci . dy é a variação (expressa pela diferença) em logaritmos.
+JOCCI <- as.data.frame(jocci)                                     #Y Ã© o Index Jocci . dy Ã© a variaÃ§Ã£o (expressa pela diferenÃ§a) em logaritmos.
 joccits <- ts(JOCCI$dy,start = 1959,frequency = 12)
-plot(joccits, main="Índice Jocci", xlab="Ano", ylab="Indice")
+plot(joccits, main="Ãndice Jocci", xlab="Ano", ylab="Indice")
 
 #Definindo Formato dos Modelos
 ar6model <- dy~dy1+dy2+dy3+dy4+dy5+dy6
-ar5model 
-ar4model 
-ar3model 
-ar2model 
-ar1model 
+ar5model <- dy~dy1+dy2+dy3+dy4+dy5
+ar4model <- dy~dy1+dy2+dy3+dy4
+ar3model <- dy~dy1+dy2+dy3
+ar2model <- dy~dy1+dy2
+ar1model <- dy~dy1
 
 #Executando os Teste LM-Breuch-Godfrey
 
@@ -49,11 +49,11 @@ View(Resultados)
 
 #Teste Reset
 TesteReset6 <- resettest(ar6model,data=jocci)
-TesteReset5 
-TesteReset4 
-TesteReset3  
-TesteReset2  
-TesteReset1  
+TesteReset5 <- resettest(ar5model,data=jocci)
+TesteReset4 <- resettest(ar4model,data=jocci)
+TesteReset3 <- resettest(ar3model,data=jocci)
+TesteReset2 <- resettest(ar2model,data=jocci)
+TesteReset1 <- resettest(ar1model,data=jocci)
 
 P_Valores_RESET <- c(TesteReset6$p.value,
                      TesteReset5$p.value,
@@ -67,7 +67,7 @@ View(Resultados)
 
 
 #Carregando o arquivo xls
-variacao_PIB <- read.table("c:/Econometria/variacao.xls", header = T)                 #Lê o arquivo variacao.xls na pasta c:/Econometria
+variacao_PIB <- read.table("c:/Econometria/variacao.xls", header = T)                 #LÃª o arquivo variacao.xls na pasta c:/Econometria
 variacao_PIB <- as.data.frame(variacao_PIB[,-1])                                      #Apaga a primeira coluna
 
 
@@ -75,5 +75,14 @@ variacao_PIB <- as.data.frame(variacao_PIB[,-1])                                
 #Executando os Teste ARCH-LM
       
 AR1_VAR <- arima(variacao_PIB,c(1,0,0))
-AR2_VAR <- arima(variacao_PIB,c(2,0,0))
 arch.test(AR1_VAR)
+AR2_VAR <- arima(variacao_PIB,c(2,0,0))
+arch.test(AR2_VAR)
+AR3_VAR <- arima(variacao_PIB,c(3,0,0))
+arch.test(AR3_VAR)
+AR4_VAR <- arima(variacao_PIB,c(4,0,0))
+arch.test(AR4_VAR)
+AR5_VAR <- arima(variacao_PIB,c(5,0,0))
+arch.test(AR5_VAR)
+AR6_VAR <- arima(variacao_PIB,c(6,0,0))
+arch.test(AR6_VAR)
